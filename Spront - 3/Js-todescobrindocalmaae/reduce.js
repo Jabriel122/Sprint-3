@@ -17,3 +17,11 @@ let totProduto = produtos.reduce((vlInicial, oP) =>{
 }, 0);
 
 console.log(`Gerente, o total de vendas é: R$${totProduto}`);
+
+const objVendedor = {
+    vendedor,
+    comisao,
+    idade: 41
+}
+
+console.log(objVendedor)
