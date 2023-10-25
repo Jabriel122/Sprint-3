@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit ="cadastrar(event)">
+
+        <label for="fruta">Cadastrar Fruta</label>
+        <input type="text" placeholder="Cadastre a sua Fruta" id="fruta">
+        <br>
+        <button type ="submit">CADASTRAR</button>
+        <ul id="lista"></ul>
+
+        <script>
+            const arrfrutas = [];
+
+            function cadastrar(e){
+                e.preventDefault();
+
+                let fruta = document.getElementById('fruta').value;
+
+                fruta.trim(); //Limpar o s espaços estremidades
+                fruta.toLowerCase();//tudo para Minusculo
+                if(fruta.trim() == ""){
+                    alert("É necessário preencher o nome corretamente")
+                    return;
+                }
+
+                arrfrutas.push(fruta);//guardar no array
+                arrfrutas.sort()//tudo para minúsculo
+
+                listarFrutas();
+            }
+
+            function listarFrutas(){
+                document.getElementById('lista').innerHTML = ''
+                let temple = '';
+
+                arrfrutas.forEach(f => {
+                    let temple = `<li>${f}</li>`;
+                    document.getElementById('lista').innerHTML += temple;
+                })
+                
+
+            }
+
+
+        </script>
+    </form>
+    
+</body>
+</html>

@@ -3,13 +3,13 @@
 //let - local scope variable
 //const - local scope non variable value
 
-// let x = 11;
-// if (x > 10){
-//     let nome = "gabes"
+let y = 11;
+if (y > 10){
+    let nome = "gabes"
 
-//     console.log("X MAIOR QUE 10")
-//     console.log(nome)
-// }
+    console.log("Y MAIOR QUE 10")
+    console.log(nome)
+}
 
 // console.log(nome);
 

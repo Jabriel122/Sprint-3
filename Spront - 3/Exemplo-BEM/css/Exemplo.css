@@ -1,0 +1,42 @@
+   
+   
+   /* Estilo base para o cartão de usuário (Block) */
+    .user-card {
+        display: flex;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+      }
+      
+      /* Estilo para o avatar (Element) */
+      .user-card__avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      
+      /* Estilo para o nome do usuário (Element) */
+      .user-card__name {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+      }
+      
+      /* Estilo para o botão "Seguir" (Element e Modifier) */
+      .user-card__button {
+        background-color: #0074d9;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 14px;
+      }
+      
+      .user-card__button--follow {
+        background-color: #34c759; /* Modificador para destacar "Seguir" */
+      }
+      .user-card__button--following{
+        background-color: gray;
+      }
