@@ -1,0 +1,68 @@
+@font-face {
+    font-family: Poppins-Regular;
+    src: url(./fonts/Poppins/Poppins-Regular.ttf);
+}
+
+.card-evento{
+    width: 250px;
+    height: 250px;
+    border: 2px #821B47 solid;
+    border-radius: 5px;
+    
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-evento__titulo{
+    /* width: px;
+    height: 27px; */
+
+    text-decoration: none;
+    font-family:Poppins-Regular; 
+    size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+}
+
+.card-evento__paragrafo{
+    /* width: 192px;
+    height: 72px; */
+    
+    display: flex;
+    align-items: center;
+
+    /* padding: 10px; */
+    margin-left: 20px;
+    text-decoration: none;
+    font-family:Poppins-Regular; 
+    size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+}
+
+.card-evento__link{
+
+    color: #B51D44;
+
+    padding: 10px;
+    margin-top: 20px;
+    text-decoration: none;
+    font-family:Poppins-Regular; 
+    size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    cursor: pointer;
+} 
+
+.card-evento__link--indisponivel{
+    color: rgb(165, 162, 162);
+    cursor: not-allowed;
+}
+
+.card-evento__link--desconectar{
+    color: #7c0825;
+    cursor: pointer;
+}

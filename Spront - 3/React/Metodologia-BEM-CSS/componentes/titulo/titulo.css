@@ -1,0 +1,30 @@
+/* container */
+.titulo{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+/* texto */
+.titulo__text{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem; /* 16px - elemento root/body */
+
+    text-transform: uppercase;
+}
+/* Linha decorativa*/
+.titulo__linha{
+    width: 200px;
+    border: red 2px solid;
+}
+
+.titulo__text--branca{
+    color: white;
+}
+
+.titulo__linha--branca{
+    color: white;
+}
