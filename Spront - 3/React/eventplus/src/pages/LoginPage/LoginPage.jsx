@@ -1,11 +1,14 @@
 import React from 'react';
-import Header from '../../components/Header/Header';
+import Titulo from '../../components/Titulo/Titulo';
 
 const LoginPage = () => {
     return (
         <div>
-            <Header/>
-            <h1 className='LoginPage__Nome'>Nome:</h1>
+            {/* <Header/> */}
+            <Titulo 
+            titleText="Login"
+            // color='red'
+            />
             <br /><br />
             <input type="text"  placeholder='Digite o seu nome aqui'/>
             <br /><br />

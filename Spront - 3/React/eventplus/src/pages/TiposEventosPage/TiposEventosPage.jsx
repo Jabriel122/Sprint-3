@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from '../../components/Header/Header';
+import Titulo from '../../components/Titulo/Titulo';
 
 const TiposEventosPage = () => {
     return (
-        <div>
-            <Header/>
-            <h1>DOIDEIRA MEU</h1>
-        </div>
+        <Titulo 
+        titleText="Tipo de Evento"
+        // color='red'
+        />
     );
 };
 
