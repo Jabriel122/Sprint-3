@@ -1,6 +1,6 @@
 import axios from "axios";
-export const eventsResource = '/Eventos';
-export const nextEventsResource = '/Eventos/ListarProximo'
+export const eventsResource = '/Evento';
+export const nextEventsResource = '/Evento/ListarProximo'
 /*
 Rotas para Tipo Eventos
  */

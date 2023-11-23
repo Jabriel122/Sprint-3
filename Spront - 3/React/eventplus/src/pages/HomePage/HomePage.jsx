@@ -8,11 +8,13 @@ import Titulo from '../../components/Titulo/Titulo';
 import NextEvent from '../../components/NextEvent/NextEvent';
 import Container from '../../components/Container/Container'
 import api from '../../Services/Services';
- 
+import Notification from '../../components/Notification/Notification';
+
 const HomePage = () => {
 
     const [nextEvents, setNextEvents] = useState([]); //dados em "Mocados"
     const urlLocal = 'http://localhost:5000/api'
+    const [notifyUser, setNotifyUser] = useState();
     //roa somente na inicializaçõa do componente
     useEffect(() => {
         async function getNextEvents() {
@@ -23,7 +25,15 @@ const HomePage = () => {
                 setNextEvents(dados);//atualiza o state
             }
             catch (error) {
-                alert("Deu ruim na api")
+                setNotifyUser(
+                    {
+                        titleNote: "Erro",
+                        textNote: "Não foi possível carregar. Verifique sua conexão com a internet",
+                        imgIcon: "danger",
+                        imgAlt: "Imagem de ilustraçáo de sucesso.",
+                        showMessage: true
+                    }
+                )
             }
         }
         getNextEvents();//roda função
@@ -32,6 +42,7 @@ const HomePage = () => {
 
     return (
         <MainContent>
+            {<Notification{...notifyUser} setNotifyUser={setNotifyUser} />}
             <Banner />
             <section className="proximos-eventos">
 
