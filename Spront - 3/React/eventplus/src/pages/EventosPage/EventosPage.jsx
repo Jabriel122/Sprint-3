@@ -7,6 +7,8 @@ import ImageIlustrator from '../../components/ImageIlustrator/ImageIlustrator';
 import api, { eventsTypeResource, eventsResource, nextEventsResource } from '../../Services/Services'
 import TableEv from './TableEv/TableEv';
 import Notification from '../../components/Notification/Notification';
+import Spinner from "../../components/Spinner/Spinner"
+
 
 const EventosPage = () => {
     const idInstituicao = "12ec020e-8e25-47b8-98b1-09fe4f703211"
@@ -16,6 +18,8 @@ const EventosPage = () => {
 
     const [frmEdit, setFrmEdit] = useState(false) //Esta em edição? Inicialmente não
     const [notifyUser, setNotifyUser] = useState(); //Componente de Notification
+    const [shoSpinner, setShowSpinner] = useState(false);//Spinner Loading
+
 
     const [nomeEvento, setNome] = useState();
     const [descricao, setDescricao] = useState();
@@ -27,6 +31,7 @@ const EventosPage = () => {
     /************************** useEffect *********************************************/
     useEffect(() => {
         async function loadTypeEvents() {
+            setShowSpinner(true)
             try {
                 const dadosEventos = await api.get(eventsResource);
                 setEvento(dadosEventos.data);
@@ -36,6 +41,7 @@ const EventosPage = () => {
             } catch (error) {
                 console.log(`Deu ruim na api tipo evento${error}`);
             }
+            setShowSpinner(false)
         }
         loadTypeEvents();
     }, []);
@@ -43,18 +49,21 @@ const EventosPage = () => {
     /*****************************  CADASTRO *****************/
 
     async function handleSubmit(e) {
+        setShowSpinner(true)
         e.preventDefault()
 
         if (nomeEvento.trim().length < 3) {
             setNotifyUser(
                 {
                     titleNote: "Aviso",
-                    textNote: "0 título deve ter pelo menos 3 caracteritica",
+                    textNote: "O título deve ter pelo menos 3 caracteritica",
                     imgIcon: "warning",
                     imgAlt: "Imagem de ilustraçáo de Aviso. Moça em frente a um símbolo de exclamação da ilustração",
                     showMessage: true
+
                 }
             )
+            setShowSpinner(false)
             return
         }
 
@@ -73,6 +82,8 @@ const EventosPage = () => {
             setDescricao("")
             setDataEvento("")
 
+          
+
             setNotifyUser(
                 {
                     titleNote: "Sucesso",
@@ -83,6 +94,7 @@ const EventosPage = () => {
                 }
             )
             console.log(retorno)
+
         } catch (error) {
             setNotifyUser(
                 {
@@ -94,6 +106,7 @@ const EventosPage = () => {
                 }
             )
         }
+        setShowSpinner(false)
     }
 
 
@@ -105,14 +118,36 @@ const EventosPage = () => {
         });
         return arrayOptions;
     }
+    /************************************** Deletar *********************************/
+    async function handleDelete(idElement) {
+        setShowSpinner(true)
+        if (window.confirm('Confirma a exclusão')) {
+            try {
+                const promise = await api.delete(`${eventsResource}/${idElement}`, { idElement })
+                if (promise.status == 204) {
+                    const buscaEventos = await api.get(eventsResource);
+                    setEvento(buscaEventos.data)
+                }
+            } catch (error) {
+                alert('erro')
+            }
+        }
+        setShowSpinner(false)
+    }
 
     /************************ Editar Cadastro ************************/
     async function handleUpdate(e) {
+        setShowSpinner(true)
         e.preventDefault();
 
         try {
             //atualizar na api
-            const retorno = await api.put(eventsResource + "/" + idEvento, { nomeEvento: nomeEvento });//o id está no state
+            const retorno = await api.put(eventsResource + "/" + idEvento, {
+                nomeEvento: nomeEvento,
+                descricao: descricao,
+                dataEvento: dataEvento,
+                idTipoEvento: idTipoEvento
+            });//o id está no state
 
             if (retorno.status === 204) {
                 //reseta o state
@@ -132,6 +167,9 @@ const EventosPage = () => {
                 //atualizar os dados na tela
                 const buscarEvento = await api.get(eventsResource, eventsTypeResource);
                 setNome(buscarEvento.data.nomeEvento);
+                setDescricao(buscarEvento.data.descricao);
+                setDataEvento(buscarEvento.data.dataEvento)
+                setIdTipoEvento(buscarEvento.data.idTipoEvento)
 
                 editActionAbort()
             }
@@ -149,11 +187,12 @@ const EventosPage = () => {
 
             console.log(error.status)
         }
-
+        setShowSpinner(false)
 
     }
 
     async function showUpdateForm(idElement) {
+        setShowSpinner(true)
         setFrmEdit(true)
         setIdEvento(idElement)//Preencher o id do evento para poder atualizar 
 
@@ -165,41 +204,34 @@ const EventosPage = () => {
             setIdTipoEvento(retorno.data.idTipoEvento)
             console.log(retorno.data)
         } catch (error) {
-             setNotifyUser(
-                    {
-                        titleNote: "Erro",
-                        textNote: "Não foi possível carregar. Verifique sua conexão com a internet",
-                        imgIcon: "danger",
-                        imgAlt: "Imagem de ilustraçáo de erro.",
-                        showMessage: true
-                    }
-                )
+            setNotifyUser(
+                {
+                    titleNote: "Erro",
+                    textNote: "Não foi possível carregar. Verifique sua conexão com a internet",
+                    imgIcon: "danger",
+                    imgAlt: "Imagem de ilustraçáo de erro.",
+                    showMessage: true
+                }
+            )
         }
+        setShowSpinner(false)
     }
 
-    async function handleDelete(idElement) {
-        if (window.confirm('Confirma a exclusão')) {
-            try {
-                const promise = await api.delete(`${eventsResource}/${idElement}`, { idElement })
-                if (promise.status == 204) {
-                    const buscaEventos = await api.get(eventsResource);
-                    setEvento(buscaEventos.data)
-                }
-            } catch (error) {
-                alert('erro')
-            }
-        }
-    }
 
     //Cancela a tela/ação de edição (Volta para o form de cadastro)
     function editActionAbort() {
+        setShowSpinner(true)
         setFrmEdit(false)
         setNome("")//reseta as variáveis
+        setDescricao("")
+        setDataEvento("")
         setIdEvento(null)//reseta as variáveis
+        setShowSpinner(false)
     }
 
     //Mostrar o formulário de edição
     async function showUpdateForm(idElement) {
+        setShowSpinner(true)
         setFrmEdit(true)
         setIdEvento(idElement)//Preencher o id do evento para poder atualizar 
 
@@ -219,13 +251,14 @@ const EventosPage = () => {
             )
         }
 
-
+        setShowSpinner(false)
     }
 
 
     return (
         <>
             {<Notification{...notifyUser} setNotifyUser={setNotifyUser} />}
+            {shoSpinner ? <Spinner /> : null}
             <MainContent>
                 <section className='cadastro-evento-section'>
                     <Container>
