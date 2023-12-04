@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
 
-const HomePage = () => {
+const ImportantePage = () => {
     const {theme} = useContext(ThemeContext)
-  
     return (
         <div>
-            <h1>Página Home</h1>
+            <h1>Pagina Importante</h1>
             <span>{theme}</span>
         </div>
+        
     );
 };
 
-export default HomePage;
+export default ImportantePage;

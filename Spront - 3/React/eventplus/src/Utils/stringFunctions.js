@@ -7,6 +7,6 @@ export const dateFormatDbToView = data => {
     return `${data[2]}/${data[1]}/${data[0]}`;
 }
 
-// export default function XPTO(x){
-//     return x + 1;
-// }
+export default function XPTO(x){
+    return x + 1;
+}

@@ -1,11 +1,18 @@
-import Rotas from './route';
+import Rotas from './routes/route';
+import { UserContext } from './context/AuthContext';
 import './App.css';
+import { useEffect, useState } from 'react';
 
-function App() {
+const App= () => {
+  const[userData, setUserData] = useState({})
+  useEffect(() =>{
+    const token = localStorage.getItem("token")
+    setUserData(token === null ?{} : JSON.parse(token))
+  }, []);
   return (
-    <div className="App">
+      <UserContext.Provider value={{userData, setUserData}}>
         <Rotas />
-    </div>
+      </UserContext.Provider>
   );
 }
 

@@ -3,6 +3,7 @@ import './ImageIlustrator.css'
 import tipoEventoImage from '../../assets/images/images/tipo-evento.svg'
 import eventoImage from '../../assets/images/images/evento.svg'
 import defaultImage from '../../assets/images/images/default-image.jpeg'
+import loginImage from "../../assets/images/images/login.svg";
 
 const ImageIlustrator = ({ altText, imageName, additionalClass }) => {
     let imageResource
@@ -15,6 +16,9 @@ const ImageIlustrator = ({ altText, imageName, additionalClass }) => {
 
         case 'evento':
             imageResource = eventoImage
+            break;
+        case 'login':
+            imageResource = loginImage
             break;
             
         default:
