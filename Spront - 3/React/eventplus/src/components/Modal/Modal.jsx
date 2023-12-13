@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import trashDelete from "../../assets/images/images/trash-delete-red.png";
 import { UserContext } from "../../context/AuthContext";
 
@@ -9,12 +9,23 @@ const Modal = ({
   modalTitle = "Feedback",
   comentaryText = "Não informado. Não informado. Não informado.",
   userId = null,
+  idEvento = null,
   showHideModal = false,
   fnDelete = null,
   fnGet= null,
   fnPost = null
 
 }) => {
+  const [comentarioDesc, setComentarioDesc] = useState("");
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  async function carregarDados() {
+    await fnGet(userId, idEvento);
+  }
+
 
   return (
     <div className="modal">

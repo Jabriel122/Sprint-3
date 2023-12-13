@@ -9,17 +9,18 @@ import NextEvent from '../../components/NextEvent/NextEvent';
 import Container from '../../components/Container/Container'
 import api from '../../Services/Services';
 import Notification from '../../components/Notification/Notification';
+import { nextEventsResource, previousEventResource } from '../../Services/Services';
 
 const HomePage = () => {
 
     const [nextEvents, setNextEvents] = useState([]); //dados em "Mocados"
-    const urlLocal = 'http://localhost:5000/api'
     const [notifyUser, setNotifyUser] = useState();
+    const [previousEvent, setPreviousEvents] = useState([]);
     //roa somente na inicializaçõa do componente
     useEffect(() => {
         async function getNextEvents() {
             try {
-                const promise = await api.get(`${urlLocal}/Evento/ListarProximos`);
+                const promise = await api.get(nextEventsResource);
                 const dados = await promise.data;
                 console.log(dados)
                 setNextEvents(dados);//atualiza o state
@@ -39,6 +40,31 @@ const HomePage = () => {
         getNextEvents();//roda função
     }
         , [])
+
+    // roda somente na inicialização do componente
+    useEffect(() => {
+        async function getPreviousEvents() {
+            try {
+                const promise = await api.get(previousEventResource);
+                const dados = await promise.data;
+                // console.log(dados);
+                setPreviousEvents(dados); //atualiza o state
+
+            } catch (error) {
+                console.log("não trouxe os próximos eventos, verifique lá!");
+                // setNotifyUser({
+                //   titleNote: "Erro",
+                //   textNote: `Não foi possível carregar os próximos eventos. Verifique a sua conexão com a internet`,
+                //   imgIcon: "danger",
+                //   imgAlt:
+                //   "Imagem de ilustração de erro. Rapaz segurando um balão com símbolo x.",
+                //   showMessage: true,
+                // });
+            }
+        }
+
+        getPreviousEvents(); //chama a função
+    }, []);
 
     return (
         <MainContent>
@@ -76,7 +102,7 @@ const HomePage = () => {
                     <Titulo titleText={"Eventos Anteriores"} />
 
                     <div className="events-box">
-                        {nextEvents.map((e) => {
+                        {previousEvent.map((e) => {
                             return (
                                 <NextEvent
                                     key={e.idEvento}
@@ -91,8 +117,6 @@ const HomePage = () => {
 
                     </div>
                 </Container>
-
-
 
             </section>
             <VisionSection />

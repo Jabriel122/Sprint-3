@@ -7,7 +7,7 @@ import Container from "../../components/Container/Container";
 import { Select } from "../../components/FormComponents/FormComponents";
 import Spinner from "../../components/Spinner/Spinner";
 import Modal from "../../components/Modal/Modal"
-import api, { eventsResource, presencsEventsReource, myCommentaryEventsResource } from "../../Services/Services"
+import api, { eventsResource, presencsEventsReource, myCommentaryEventsResource, commentaryEventsResource } from "../../Services/Services"
 
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
@@ -27,10 +27,11 @@ const EventosAlunoPage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [comentario, setComentario] = useState("")
+  const [newComentary, setNewComentary] = useState([])
 
   // recupera os dados globais do usuário
-  const { userData, setUserData } = useContext(UserContext);
-  const [idEvento, setIdEventos] = useState(null)
+  const { userData } = useContext(UserContext);
+  const [idEvento, setIdEventos] = useState("")
 
 
   //Roda o carregamento da página e sempre que o tipo evento for alterado
@@ -112,10 +113,10 @@ const EventosAlunoPage = () => {
   }
 
   //Ler um comentário - get
-  async function loadMyComentary (idUsuario, idEvento ){
-    const promise = await api.get(`${myCommentaryEventsResource}? idUsuario = ${idUsuario}& idEvento = ${idEvento}` )
+  async function loadMyComentary (){
+    const promise = await api.get(`${myCommentaryEventsResource}?idUsuario=${userData.userId}&idEvento=${idEvento}` )
     console.log("Espero que esteja aparencendo")
-    console.log(idUsuario,idEvento)
+    console.log(userData.userId,idEvento)
     console.log(promise.data.descricao)
     setComentario(promise.data.descricao)
   }
@@ -125,14 +126,19 @@ const EventosAlunoPage = () => {
   //Cadastra um cometário - post
   const postMyComentary = async(descricao, idEvento, idUsuario) => {
     try {
-      const promise = await api.post(myCommentaryEventsResource, {
+      const promise = await api.post(commentaryEventsResource, {
         descricao: descricao,
         exibe: true,
         idUsuario: idUsuario,
         idEvento: idEvento,
       })
-      setComentario(promise)
-      console.log("AQUI OLHA AQUI")
+
+      if(promise.status === 200 || promise.status === 201 || promise.status === 202){
+        setComentario(newComentary)
+        setNewComentary("")
+        console.log("AQUI OLHA AQUI")
+      }
+    
     } catch (error) {
       console.log("Paiou")
     }
@@ -141,7 +147,10 @@ const EventosAlunoPage = () => {
 
   const showHideModal = (idEvent) => {
     setShowModal(showModal ? false : true);
-    setUserData({ ...userData, idEvento: idEvent })
+    //setUserData({ ...userData, idEvento: idEvent })
+    setIdEventos(idEvent);
+    setComentario("")
+    setNewComentary("")
   };
 
   //Remove o comentário - delete
@@ -155,7 +164,7 @@ const EventosAlunoPage = () => {
         //Connect
         const promise = await api.post(presencsEventsReource, {
           situacao: true,
-          idUsuario: userData.userId,
+          userId: userData.userId,
           idEvento: idEvent
         });
 
@@ -218,6 +227,7 @@ const EventosAlunoPage = () => {
       {showModal ? (
         <Modal
           userId={userData.userId}
+          idEvento={idEvento}
           showHideModal={showHideModal}
           fnGet={loadMyComentary}
           fnPost={postMyComentary}
