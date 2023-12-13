@@ -2,7 +2,16 @@ import axios from "axios";
 
 ///Rotas para Eventos
 export const eventsResource = '/Evento';
-export const myEventsResource = '/EventosAluno';
+
+// Rotas para o recurso Listar minhas
+export const myEventsResource = '/PresencasEvento/ListarMinhas';
+
+export const myCommentaryEventsResource = '/ComentariosEvento/BuscarPorIdUsuario'
+
+//Rotas para o recurso Listar Presença Evento
+export const presencsEventsReource = '/PresencasEvento';
+
+// Rotas para o recurso Listar Presenãs Eventos
 export const nextEventsResource = '/Evento/ListarProximo';
 
 ///Rotas para Login
@@ -13,10 +22,10 @@ export const eventsTypeResource = '/TiposEvento';
 
 const apiPort ='5000';
 const localApiUri = `http://localhost:${apiPort}/api`;
-const externaApiUri = null;
+const externaApiUri = `https://eventwebapi-gabrielmarchetti.azurewebsites.net/api`;
 
 const api = axios.create({
-    baseURL: localApiUri
+    baseURL: externaApiUri
 });
 
 export default api;

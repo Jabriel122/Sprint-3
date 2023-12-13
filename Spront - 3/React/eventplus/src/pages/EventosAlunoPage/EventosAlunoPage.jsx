@@ -7,79 +7,185 @@ import Container from "../../components/Container/Container";
 import { Select } from "../../components/FormComponents/FormComponents";
 import Spinner from "../../components/Spinner/Spinner";
 import Modal from "../../components/Modal/Modal"
-import api, {myEventsResource} from "../../Services/Services"
+import api, { eventsResource, presencsEventsReource, myCommentaryEventsResource } from "../../Services/Services"
 
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
-import { eventsResource, myEventsResource } from "../../Services/Services";
+import { myEventsResource } from "../../Services/Services";
 
 const EventosAlunoPage = () => {
   // state do menu mobile
   const [exibeNavbar, setExibeNavbar] = useState(false);
-  const [eventos, setEventos] = useState([
-    { nomeEvento: "Javas", idEvento: "1234", dataEvento: "20/12/2023" },
-    { nomeEvento: "C#", idEvento: "2345", dataEvento: "22/12/2023" },
-    { nomeEvento: "Mathias", idEvento: "0909", dataEvento: "21/12/2023" }
-
-  ]);
+  const [eventos, setEventos] = useState([]);
   // select mocado
   const [quaisEventos, setQuaisEventos] = useState([
     { value: 1, text: "Todos os eventos" },
     { value: 2, text: "Meus eventos" },
   ]);
 
-  const [tipoEvento, setTipoEvento] = useState(1); //código do tipo do Evento escolhido
+  const [tipoEvento, setTipoEvento] = useState("1"); //código do tipo do Evento escolhido
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [comentario, setComentario] = useState("")
 
   // recupera os dados globais do usuário
   const { userData, setUserData } = useContext(UserContext);
+  const [idEvento, setIdEventos] = useState(null)
+
 
   //Roda o carregamento da página e sempre que o tipo evento for alterado
   useEffect(() => {
 
-
-
-
     loadEventsType();
-  }, [tipoEvento]);
+  }, [tipoEvento, userData.userId]);
 
-  //Criar uma função para trazer os eventos do aluno ou todos os eventos
   async function loadEventsType() {
-    setShowSpinner(true)
+    setShowSpinner(true);
     setEventos([]);//Zerar o arry dos eventos
 
-    if (tipoEvento == 1) { //chamar a api de todos os eventos
+    if (tipoEvento === "1") { //chamar a api de todos os eventos
       try {
-        const retornoEventos = await api.get(`${myEventsResource}/${userData.userId}`)
-        setEventos(retornoEventos.data);
-      } catch (error) {
+        // Listar Eventos (Eventos)
+        const todosEventos = await api.get(eventsResource);
+        const meusEventos = await api.get(`${myEventsResource}/${userData.userId}`);
 
+        const eventosMarcados = verificaPresenca(todosEventos.data, meusEventos.data);
+        setEventos(eventosMarcados);
+
+        console.clear()
+        console.log("Todos OS EVENTOS")
+        console.log(todosEventos.data)
+        console.log("MEUS EVENTOSS")
+        console.log(meusEventos.data)
+        console.log("EVENTOS MARCADOSSS")
+        console.log(eventosMarcados)
+
+
+      } catch (error) { //colocar notificação
+        console.log("Erro na API")
+        console.log(error)
+      }
+    } else if (tipoEvento === "2") {
+      //Listar meus eventos (presencasEventos)
+      try {
+        const retornoEventos = await api.get(`${myEventsResource}/${userData.userId}`);
+        console.log("Minhas Presenças")
+        console.log(retornoEventos.data)
+        const arrEventos = [];//arry vazio
+        retornoEventos.data.forEach((e) => {
+          arrEventos.push({ ...e.evento, situacao: e.situacao, idPresencaEvento: e.idPresencaEvento });
+        });
+        setEventos(arrEventos)
+        // console.log(arrEventos)
+      } catch (error) { //colocar notificação
+        console.log("Erro na API")
+        console.log(error)
       }
     } else {
-
+      setEventos([]);
     }
+    setShowSpinner(false)
   }
+
+  const verificaPresenca = (arrAllEvents, eventsUser) => {
+    for (let x = 0; x < arrAllEvents.length; x++) { //Para cada evento principal
+      for (let i = 0; i < eventsUser.length; i++) {//Procurar a correpndência em minhas presenças
+        if (arrAllEvents[x].idEvento === eventsUser[i].evento.idEvento) {
+          arrAllEvents[x].situacao = true;
+          arrAllEvents[x].idPresencaEvento = eventsUser[i].idPresencaEvento;
+
+          break;//Paro de procurar para o evento principal atual
+        } else {
+          arrAllEvents[x].situacao = false //O else não é necessário, seria caso JavaScript fosse tipado igual a o C#.. (Só coloquei para deixar claro isso)
+        }
+      }
+    }
+
+    //retorna todos os eventos marcados com a presença do usuário
+    return arrAllEvents;
+  }
+  //Criar uma função para trazer os eventos do aluno ou todos os eventos
 
   // toggle meus eventos ou todos os eventos
   function myEvents(tpEvent) {
     setTipoEvento(tpEvent);
   }
 
-  async function loadMyComentary(idComentary) {
-    return "????";
+  //Ler um comentário - get
+  async function loadMyComentary (idUsuario, idEvento ){
+    const promise = await api.get(`${myCommentaryEventsResource}? idUsuario = ${idUsuario}& idEvento = ${idEvento}` )
+    console.log("Espero que esteja aparencendo")
+    console.log(idUsuario,idEvento)
+    console.log(promise.data.descricao)
+    setComentario(promise.data.descricao)
   }
 
-  const showHideModal = () => {
+
+
+  //Cadastra um cometário - post
+  const postMyComentary = async(descricao, idEvento, idUsuario) => {
+    try {
+      const promise = await api.post(myCommentaryEventsResource, {
+        descricao: descricao,
+        exibe: true,
+        idUsuario: idUsuario,
+        idEvento: idEvento,
+      })
+      setComentario(promise)
+      console.log("AQUI OLHA AQUI")
+    } catch (error) {
+      console.log("Paiou")
+    }
+
+  }
+
+  const showHideModal = (idEvent) => {
     setShowModal(showModal ? false : true);
+    setUserData({ ...userData, idEvento: idEvent })
   };
 
+  //Remove o comentário - delete
   const commentaryRemove = () => {
     alert("Remover o comentário");
   };
 
-  function handleConnect() {
-    alert("Desenvolver a função conectar evento");
+  async function handleConnect(idEvent, whatTeFunction, presencaId = null) {
+    if (whatTeFunction === "connect") {
+      try {
+        //Connect
+        const promise = await api.post(presencsEventsReource, {
+          situacao: true,
+          idUsuario: userData.userId,
+          idEvento: idEvent
+        });
+
+        if (promise.status === 201) {
+          loadEventsType();
+          alert("Presença confirmada, parabéns")
+        }
+        setTipoEvento(1);//Chamar a api??
+        const todosEventos = await api.get(eventsResource);
+        setEventos(todosEventos.data)
+      } catch (error) {
+        console.log("Erro ao ao conectar o usuário de evento")
+      }
+
+      return;
+    }
+    //unconnect
+    try {
+      const unconnect = api.delete(`${presencsEventsReource}/${presencaId}`)
+      if (unconnect.status === 204) {
+        loadEventsType();
+        alert("Desconectado do eventos")
+        // const todosEventos = await api.get(eventsResource);
+        // setEventos(todosEventos.data)
+      }
+    } catch (error) {
+      console.log("Erro ao descontecta o usuário do evento")
+    }
+
+
   }
   return (
     <>
@@ -101,9 +207,7 @@ const EventosAlunoPage = () => {
           <Table
             dados={eventos}
             fnConnect={handleConnect}
-            fnShowModal={() => {
-              showHideModal();
-            }}
+            fnShowModal={showHideModal}
           />
         </Container>
       </MainContent>
@@ -115,7 +219,11 @@ const EventosAlunoPage = () => {
         <Modal
           userId={userData.userId}
           showHideModal={showHideModal}
+          fnGet={loadMyComentary}
+          fnPost={postMyComentary}
           fnDelete={commentaryRemove}
+          comentaryText={comentario}
+
         />
       ) : null}
     </>

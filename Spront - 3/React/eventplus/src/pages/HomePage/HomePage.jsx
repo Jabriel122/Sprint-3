@@ -66,6 +66,34 @@ const HomePage = () => {
                     </div>
                 </Container>
 
+
+
+            </section>
+
+            <section className="proximos-eventos">
+
+                <Container>
+                    <Titulo titleText={"Eventos Anteriores"} />
+
+                    <div className="events-box">
+                        {nextEvents.map((e) => {
+                            return (
+                                <NextEvent
+                                    key={e.idEvento}
+                                    eventDate={e.dataEvento}
+                                    title={e.nomeEvento}
+                                    description={e.descricao}
+                                    idEvent={e.idEvento}
+                                />
+                            );
+                        })
+                        }
+
+                    </div>
+                </Container>
+
+
+
             </section>
             <VisionSection />
             <ContatoSection />

@@ -60,15 +60,22 @@ const Table = ({ dados, fnConnect = null, fnShowModal = null }) => {
               </td>
 
               <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
+                {/* Imagem do comentário - abre o modal */}
                 <img
                   className="tbal-data__icon"
                   idevento={e.idEvento}
                   src={comentaryIcon}
                   alt=""
-                  onClick={fnShowModal}
+                  onClick={() => {fnShowModal(e.idEvento)}}
                 />
 
-                <ToggleSwitch manipulationFunction={fnConnect} />
+                <ToggleSwitch toggleActive={e.situacao} manipulationFunction={() => {
+                  fnConnect(
+                    e.idEvento,
+                    e.situacao ? "unconnect" : "connect",
+                    e.idPresencaEvento //? e.idPresencaEvento: null //parâmetro opcional
+                    ) 
+                }} />
               </td>
             </tr>
           );
