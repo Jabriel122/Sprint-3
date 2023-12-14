@@ -23,7 +23,7 @@ const Rotas = () => {
                     <Route element={<LoginPage />} path={"/login"} />
                     <Route element={<PrivateRoute redirectTo='/'><EventosPage /></PrivateRoute>} path={"/eventos"} />
                     <Route element={<PrivateRoute redirectTo='/'><EventosAlunoPage /></PrivateRoute>} path={"/eventos-aluno"} />
-                    <Route path="/detalhes-evento"element={<DetalheEventoPage />}/>
+                    <Route element={<DetalheEventoPage />} path="/detalhes-evento/:idEvento"/>
                     <Route element={<TestePage/>}/> path={"/Teste/:idEvento"}
                     <Route
                         element={

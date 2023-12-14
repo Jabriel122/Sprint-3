@@ -13,10 +13,13 @@ const Modal = ({
   showHideModal = false,
   fnDelete = null,
   fnGet= null,
-  fnPost = null
+  fnPost = null,
+  idComentario= null,
+
+  newCommentary,
+  setNewCommentary = null
 
 }) => {
-  const [comentarioDesc, setComentarioDesc] = useState("");
 
   useEffect(() => {
     carregarDados();
@@ -42,7 +45,11 @@ const Modal = ({
             src={trashDelete}
             className="comentary__icon-delete"
             alt="Ícone de uma lixeira"
-            onClick={() => {fnDelete()}}
+            onClick={async () => {
+              await fnDelete(idComentario);
+              await carregarDados();
+            }}
+            
           />
 
           <p className="comentary__text">{comentaryText}</p>
@@ -53,10 +60,12 @@ const Modal = ({
         <Input
           placeholder="Escreva seu comentário..."
           className="comentary__entry"
-          // value={comentaryDesc}
-          // manipulationFunction={(e) => {
-          //   setComentarioDesc(e.target.value)
-          // }}
+          required={"required"}
+          type={"text"}
+          value={newCommentary}
+           manipulationFunction={(e) => {
+            setNewCommentary(e.target.value)
+           }}
         />
 
         <Button

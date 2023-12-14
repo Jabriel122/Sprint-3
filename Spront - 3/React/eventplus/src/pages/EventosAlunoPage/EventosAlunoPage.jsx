@@ -27,11 +27,12 @@ const EventosAlunoPage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [comentario, setComentario] = useState("")
-  const [newComentary, setNewComentary] = useState([])
+  const [newCommentary, setNewCommentary] = useState([])
 
   // recupera os dados globais do usuário
   const { userData } = useContext(UserContext);
   const [idEvento, setIdEventos] = useState("")
+  const [idComentario, setIdComentario] = useState("")
 
 
   //Roda o carregamento da página e sempre que o tipo evento for alterado
@@ -119,28 +120,29 @@ const EventosAlunoPage = () => {
     console.log(userData.userId,idEvento)
     console.log(promise.data.descricao)
     setComentario(promise.data.descricao)
+   
   }
 
 
 
   //Cadastra um cometário - post
-  const postMyComentary = async(descricao, idEvento, idUsuario) => {
+  async function postMyComentary(){
     try {
       const promise = await api.post(commentaryEventsResource, {
-        descricao: descricao,
+        descricao: newCommentary,
         exibe: true,
-        idUsuario: idUsuario,
-        idEvento: idEvento,
+        idUsuario: userData.userId,
+        idEvento: idEvento
       })
 
       if(promise.status === 200 || promise.status === 201 || promise.status === 202){
-        setComentario(newComentary)
-        setNewComentary("")
+        setComentario(newCommentary)
+        setNewCommentary("")
         console.log("AQUI OLHA AQUI")
       }
     
     } catch (error) {
-      console.log("Paiou")
+      console.log("Erro ao cadastra o comentário")
     }
 
   }
@@ -150,12 +152,22 @@ const EventosAlunoPage = () => {
     //setUserData({ ...userData, idEvento: idEvent })
     setIdEventos(idEvent);
     setComentario("")
-    setNewComentary("")
+    setNewCommentary("")
   };
 
   //Remove o comentário - delete
-  const commentaryRemove = () => {
-    alert("Remover o comentário");
+  const commentaryRemove = async(idComentario) => {
+    try {
+      const promise = await api.delete(
+          `${commentaryEventsResource}/${idComentario}`
+      );
+      if (promise.status === 200) {
+          alert("Evento excluído com sucesso!");
+      }
+  } catch (error) {
+      console.log("Erro ao excluir ");
+      console.log(error);
+  }
   };
 
   async function handleConnect(idEvent, whatTheFunction, presencaId = null) {
@@ -233,6 +245,10 @@ const EventosAlunoPage = () => {
           fnPost={postMyComentary}
           fnDelete={commentaryRemove}
           comentaryText={comentario}
+
+          newCommentary={newCommentary}
+          setNewCommentary={setNewCommentary}
+          idComentario={idComentario}
 
         />
       ) : null}

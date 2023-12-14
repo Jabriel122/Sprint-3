@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import api, { eventsResource, eventsTypeResource, detailsEventResource } from "../../Services/Services";
-// import api from "../../Services/Service";
 import Container from "../../components/Container/Container";
 import MainContent from "../../components/MainContnet/MainContent";
 import Titulo from "../../components/Titulo/Titulo";
@@ -13,7 +12,7 @@ const DetalheEventoPage = () => {
 
   const { idEvento } = useParams();
 
-  const [comentario, setComentarios] = useState("");
+  const [comentario, setComentarios] = useState([]);
   const [nomeEvento, setNomeEvento] = useState("");
   const [descricao, setDescricao] = useState("");
   const [tipo, setTipo] = useState("");
@@ -25,8 +24,12 @@ const DetalheEventoPage = () => {
   //Roda o carregamento da página e sempre que o tipo evento for alterado
   useEffect(() => {
 
-    getAll();
+
+
+
+    getAll(idEvento);
   }, []);
+
 
   async function getAll(id) {
     try {
@@ -49,58 +52,21 @@ const DetalheEventoPage = () => {
     }
   }
 
-
-  
-
-  //Criar uma função para trazer os eventos do aluno ou todos os eventos
-
-  // toggle meus eventos ou todos os eventos
-  function myEvents() {
-
-  }
-
-  //Ler um comentário - get
-  async function loadMyComentary() {
-
-  }
-
-
-
-  //Cadastra um cometário - post
-  const postMyComentary = async (descricao, idEvento, idUsuario) => {
-
-
-
-
-
-  }
-
-  const showHideModal = (idEvent) => {
-
-  };
-
-  //Remove o comentário - delete
-  const commentaryRemove = () => {
-
-  };
-
-  async function handleConnect(idEvent, whatTheFunction, presencaId = null) {
-
-    return;
-
-
-  }
   return (
     <>
       {/* <Header exibeNavbar={exibeNavbar} setExibeNavbar={setExibeNavbar} /> */}
 
       <MainContent>
         <Container>
-          <Titulo titleText={"Eventos"} className="custom-title" />
+          <Titulo titleText={"Detalhes do Evento"} className="custom-title" />
 
 
           <Table
-
+            nome={nomeEvento}
+            descricao={descricao}
+            tipo={tipo}
+            data={data}
+            comentario={comentario}
           />
         </Container>
       </MainContent>
