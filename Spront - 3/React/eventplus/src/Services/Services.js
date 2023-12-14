@@ -6,6 +6,8 @@ export const eventsResource = '/Evento';
 // Rotas para o recurso Listar minhas
 export const myEventsResource = '/PresencasEvento/ListarMinhas';
 
+export const detailsEventResource = '/ComentariosEvento/ListarSomenteExibe'
+
 export const myCommentaryEventsResource = '/ComentariosEvento/BuscarPorIdUsuario'
 export const commentaryEventsResource = '/ComentariosEvento'
 

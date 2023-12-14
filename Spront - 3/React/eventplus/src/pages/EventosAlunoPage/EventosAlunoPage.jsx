@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Header from "../../components/Header/Header";
+// import Header from "../../components/Header/Header";
 import MainContent from "../../components/MainContnet/MainContent";
 import Title from "../../components/Titulo/Titulo";
 import Table from "./TableEvA/TableEvA";
@@ -158,8 +158,8 @@ const EventosAlunoPage = () => {
     alert("Remover o comentário");
   };
 
-  async function handleConnect(idEvent, whatTeFunction, presencaId = null) {
-    if (whatTeFunction === "connect") {
+  async function handleConnect(idEvent, whatTheFunction, presencaId = null) {
+    if (whatTheFunction === "connect") {
       try {
         //Connect
         const promise = await api.post(presencsEventsReource, {

@@ -6,6 +6,7 @@ import MainContent from '../../components/MainContnet/MainContent'
 import ContatoSection from '../../components/ContactSection/ContactSection'
 import Titulo from '../../components/Titulo/Titulo';
 import NextEvent from '../../components/NextEvent/NextEvent';
+import PreviousEvent from "../../components/PreviousEvent/PreviousEvent"
 import Container from '../../components/Container/Container'
 import api from '../../Services/Services';
 import Notification from '../../components/Notification/Notification';
@@ -104,7 +105,7 @@ const HomePage = () => {
                     <div className="events-box">
                         {previousEvent.map((e) => {
                             return (
-                                <NextEvent
+                                <PreviousEvent
                                     key={e.idEvento}
                                     eventDate={e.dataEvento}
                                     title={e.nomeEvento}

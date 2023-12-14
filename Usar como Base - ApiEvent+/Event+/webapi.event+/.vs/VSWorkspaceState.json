@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Contexts",
+    "\\Controllers",
+    "\\Interfaces",
+    "\\Repositories",
+    "\\Utils",
+    "\\ViewModels"
+  ],
+  "SelectedNode": "\\Controllers\\LoginController.cs",
+  "PreviewInSolutionExplorer": false
+}

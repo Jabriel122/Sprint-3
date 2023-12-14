@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Container from '../../components/Container/Container';
 import Titulo from '../../components/Titulo/Titulo';
 const TestePage = () => {
     const [count, setCount] = useState(0);
     const [calculation, setCalulation] = useState(0);
-
+    const {idEvento} = useParams();
     //executado quando o componente for montado
     //e quando o state count for alterado
 
     useEffect(() => {
-        setCalulation(count * 2);
+        alert(`useEffect fazendo get do ${idEvento}`)
+
+
+        // setCalulation(count * 2);
     }, [count]);
 
     return (

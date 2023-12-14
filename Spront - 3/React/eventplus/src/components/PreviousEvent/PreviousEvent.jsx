@@ -5,11 +5,14 @@ import { Tooltip } from "react-tooltip";
 
 // importar a função lá do arquivo stringFunction (destructuring)
 import { dateFormatDbToView } from "../../Utils/stringFunctions";
+import { Link, useParams  } from "react-router-dom";
 
 const PreviousEvent = ({ title, description, eventDate, idEvent }) => {
-  function conectar(idEvent) {
-    // dá pra usar a prop idEvent? testar
-    alert(`Chamar o recurso para conectar: ${idEvent}`);
+  
+  const {idEvento} = useParams();
+  
+  function vizualizar(idEvent) {
+    <Link to={`/detalhes-evento/${idEvent}`}> </Link>
   }
   return (
     <article className="event-card">
@@ -31,14 +34,12 @@ const PreviousEvent = ({ title, description, eventDate, idEvent }) => {
         {dateFormatDbToView(eventDate)}
       </p>
 
-      <a
-        onClick={() => {
-          conectar(idEvent);
-        }}
+      <Link
+        to={`/detalhes-evento/${idEvent}`}
         className="event-card__connect-link"
       >
-        Conectar
-      </a>
+        Vizualizar
+      </Link>
     </article>
   );
 };
