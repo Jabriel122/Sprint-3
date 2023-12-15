@@ -7,9 +7,10 @@ export const eventsResource = '/Evento';
 export const myEventsResource = '/PresencasEvento/ListarMinhas';
 
 export const detailsEventResource = '/ComentariosEvento/ListarSomenteExibe'
-
 export const myCommentaryEventsResource = '/ComentariosEvento/BuscarPorIdUsuario'
 export const commentaryEventsResource = '/ComentariosEvento'
+
+export const aplayCommentaryWithAi = '/ComentariosEvento/ComentarioIA'
 
 //Rotas para o recurso Listar Presença Evento
 export const presencsEventsReource = '/PresencasEvento';

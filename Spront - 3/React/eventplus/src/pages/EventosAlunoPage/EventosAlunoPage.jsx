@@ -7,11 +7,12 @@ import Container from "../../components/Container/Container";
 import { Select } from "../../components/FormComponents/FormComponents";
 import Spinner from "../../components/Spinner/Spinner";
 import Modal from "../../components/Modal/Modal"
-import api, { eventsResource, presencsEventsReource, myCommentaryEventsResource, commentaryEventsResource } from "../../Services/Services"
+import api, { eventsResource, presencsEventsReource, myCommentaryEventsResource, commentaryEventsResource, aplayCommentaryWithAi } from "../../Services/Services"
 
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
 import { myEventsResource } from "../../Services/Services";
+import { useParams } from "react-router-dom";
 
 const EventosAlunoPage = () => {
   // state do menu mobile
@@ -33,6 +34,7 @@ const EventosAlunoPage = () => {
   const { userData } = useContext(UserContext);
   const [idEvento, setIdEventos] = useState("")
   const [idComentario, setIdComentario] = useState("")
+  // const {idEvent} = useParams();
 
 
   //Roda o carregamento da página e sempre que o tipo evento for alterado
@@ -128,17 +130,15 @@ const EventosAlunoPage = () => {
   //Cadastra um cometário - post
   async function postMyComentary(){
     try {
-      const promise = await api.post(commentaryEventsResource, {
+      const promise = await api.post(aplayCommentaryWithAi, {
         descricao: newCommentary,
-        exibe: true,
         idUsuario: userData.userId,
         idEvento: idEvento
-      })
+      });
 
       if(promise.status === 200 || promise.status === 201 || promise.status === 202){
         setComentario(newCommentary)
         setNewCommentary("")
-        console.log("AQUI OLHA AQUI")
       }
     
     } catch (error) {
